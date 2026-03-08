@@ -1,35 +1,35 @@
 LINK = 0
 
 if LINK
-format ELF
+	format ELF
 else
-format ELF executable
+	format ELF executable
 end if
 
 if LINK
-public _start
-public error
-public request
-public is_numchar
-public next
-public is_mul_div
-public is_plus_minus
-public lit
-public factor
-public term
-public expr
-public parse
+	public _start
+	public error
+	public request
+	public is_numchar
+	public next
+	public is_mul_div
+	public is_plus_minus
+	public lit
+	public factor
+	public term
+	public expr
+	public parse
 
-public unknown_token
-public syntax
-public input
-public token
-public token_value
-public pos
+	public unknown_token
+	public syntax
+	public input
+	public token
+	public token_value
+	public pos
 
-section '.text' executable
+	section '.text' executable
 else
-entry _start
+	entry _start
 end if
 
 SYS_EXIT  = 1
@@ -233,14 +233,14 @@ lit:
 	mov esi, syntax_size
 	call error
 
-.number:
-	mov eax, [token_value]
-	call next
-	jmp .ret
+	.number:
+		mov eax, [token_value]
+		call next
+		jmp .ret
 
-.ret:
-	leave
-	ret
+	.ret:
+		leave
+		ret
 
 
 ; result - eax
@@ -259,28 +259,28 @@ factor:
 	mov dword [ebp-4], eax
 	jmp .ret
 
-.lparen:
-	call next
-	call expr
-	mov dword [ebp-4], eax
+	.lparen:
+		call next
+		call expr
+		mov dword [ebp-4], eax
 
-	; expect rparen
-	mov al, [token]
-	cmp al, TOK_RPAREN
-	je .rparen
+		; expect rparen
+		mov al, [token]
+		cmp al, TOK_RPAREN
+		je .rparen
 
-	mov edi, syntax_rparen
-	mov esi, syntax_rparen_size
-	call error
+		mov edi, syntax_rparen
+		mov esi, syntax_rparen_size
+		call error
 
-.rparen:
-	call next
-	jmp .ret
+		.rparen:
+			call next
+			jmp .ret
 
-.ret:
-	mov eax, dword [ebp-4]
-	leave
-	ret
+	.ret:
+		mov eax, dword [ebp-4]
+		leave
+		ret
 
 ; result - eax
 term:
@@ -326,16 +326,14 @@ term:
 			div ebx
 			mov [ebp-4], eax
 			jmp .end1
-	
 		.end1:
 			mov al, [token]
 			mov [ebp-5], al
 			jmp .loop
 	.end:
-	mov eax, [ebp-4]
-	leave
-	ret
-
+		mov eax, [ebp-4]
+		leave
+		ret
 
 ; result - eax
 expr:
@@ -379,15 +377,15 @@ expr:
 			mov [ebp-4], eax
 			jmp .end1
 		.end1:
-		mov al, [token]
-		mov [ebp-5], al
+			mov al, [token]
+			mov [ebp-5], al
 
-		jmp .loop
+			jmp .loop
 
 	.end:
-	mov eax, [ebp-4]
-	leave
-	ret
+		mov eax, [ebp-4]
+		leave
+		ret
 
 ; result - eax
 parse:
@@ -406,7 +404,7 @@ _start:
 	int 0x80
 
 if LINK
-section '.data' writeable
+	section '.data' writeable
 end if
 
 unknown_token: db "unknown token", 10
