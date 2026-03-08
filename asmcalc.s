@@ -1,4 +1,4 @@
-LINK = 0
+LINK = 1
 
 if LINK
 format ELF
@@ -25,7 +25,6 @@ public syntax
 public input
 public token
 public token_value
-public result
 public pos
 
 section '.text' executable
@@ -297,6 +296,7 @@ term:
 		call factor
 		mov [ebp-9], eax ; right
 
+		mov dl, [ebp-5]
 		cmp dl, TOK_MUL
 		je .mul
 		cmp dl, TOK_DIV
@@ -405,5 +405,4 @@ syntax_size =  $ - syntax
 input: rb 1024
 token: rb 1
 token_value: rb 4
-result: rb 4
 pos: rb 4
