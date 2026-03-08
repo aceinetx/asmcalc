@@ -1,4 +1,4 @@
-LINK = 1
+LINK = 0
 
 if LINK
 format ELF
@@ -263,6 +263,17 @@ factor:
 	call next
 	call expr
 	mov dword [ebp-4], eax
+
+	; expect rparen
+	mov al, [token]
+	cmp al, TOK_RPAREN
+	je .rparen
+
+	mov edi, syntax_rparen
+	mov esi, syntax_rparen_size
+	call error
+
+.rparen:
 	call next
 	jmp .ret
 
@@ -402,6 +413,8 @@ unknown_token: db "unknown token", 10
 unknown_token_size =  $ - unknown_token
 syntax: db "syntax error", 10
 syntax_size =  $ - syntax
+syntax_rparen: db "syntax error: expected rparen", 10
+syntax_rparen_size =  $ - syntax_rparen
 input: rb 1024
 token: rb 1
 token_value: rb 4
